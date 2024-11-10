@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Pomodo_ver.3</string>
+    <string name="planner_text">Planner</string>
+    <string name="edit_text">편집</string>
+    <string name="plus_text">+</string>
+    <string name="timer_icon_desc">Timer icon</string>
+    <string name="checklist_icon_desc">Checklist icon</string>
+    <string name="leaderboard_icon_desc">Leaderboard icon</string>
+    <string name="calendar_icon_desc">calendar_icon_desc</string>
+</resources>
