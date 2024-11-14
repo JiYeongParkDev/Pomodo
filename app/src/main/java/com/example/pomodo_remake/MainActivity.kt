@@ -13,11 +13,14 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
+import java.text.SimpleDateFormat
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var startButton: ImageView         // 시작 버튼
@@ -57,6 +60,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    //데이터베이스 설계 테스트를 위해 추가해봄
+    private val timerViewModel: TimerViewModel by viewModels()
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createNotificationChannel()
@@ -68,6 +76,9 @@ class MainActivity : AppCompatActivity() {
             insets
         } // 이 부분은 기본으로 생성되있는듯
 
+
+        // 오늘의 총 집중 시간을 가져오는 코드
+        loadTodayFocusTime()
 
 
         //UI 요소 초기화
@@ -152,8 +163,6 @@ class MainActivity : AppCompatActivity() {
         // 집중 타이머 시작 시 휴식 타이머 UI 초기화
         updateBreakTimeUI(breakRemainingTime)
 
-        Log.d("TIMER_STATE", "Timer started. isFocusTimerStopState = $isFocusTimerStopState")
-
 
         // 멈춘 상태에서 재개 시 첫 Tick 상태 초기화
         if (isFocusTimerStopState) {
@@ -172,6 +181,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     // 이후 tick에서 총 집중 시간 업데이트
                         totalFocusTimeInSeconds++
+                    Log.d("TIMER_UPDATE", "Updated totalFocusTimeInSeconds: $totalFocusTimeInSeconds seconds")
                         updateTotalFocusTimeUI(totalFocusTimeInSeconds)
                 }
             }
@@ -181,9 +191,17 @@ class MainActivity : AppCompatActivity() {
                 focusRemainingTime = focusTime // 다음 실행을 위해 초기화      // 남은 시간 0으로 설정
                 updateFocusTimeUI(0)
 
+                // 집중 타이머 완료 시 총 집중 시간을 저장
+                val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())
+                val focusTimeInMillis = totalFocusTimeInSeconds * 1000L // 초 -> 밀리초 변환
+                saveFocusTimeToDatabase(today, focusTimeInMillis) // 초 -> 밀리초 변환
+                Log.d("TIMER_STATE", "Focus time finished. Saved $focusTimeInMillis ms for date $today")
+
+
                 // Snackbar를 중앙에 표시
                 val rootView = findViewById<View>(R.id.main) // 루트 레이아웃 ID
                 showCenteredSnackbar(rootView, "집중 타이머 종료",1500L)  //1.5초동안 타이머 종료 되었다고 뜸
+
 
 
                 startBreakTimer()           // 타이머 종료 후 휴식 타이머 시작
@@ -237,7 +255,16 @@ class MainActivity : AppCompatActivity() {
         countDownFocusTimer.cancel()
 
 
-        Log.d("TIMER_STATE", "Timer stopped. isFocusTimerStopState = $isFocusTimerStopState")
+
+        // 경과된 시간을 계산(DB 저장을 위해)
+        val elapsedTimeInMillis = totalFocusTimeInSeconds * 1000L // 초 -> 밀리초 변환
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis()) // 오늘 날짜 가져오기
+        // 경과된 시간과 날짜 RoomDB에 저장
+        saveFocusTimeToDatabase(today, elapsedTimeInMillis)
+
+        // 저장 후 확인 로그 출력
+        Log.d("TIMER_STATE", "Focus timer stopped. Saved $elapsedTimeInMillis ms for date $today")
+
 
         startButton.visibility = View.VISIBLE
         stopButton.visibility = View.GONE
@@ -424,6 +451,7 @@ class MainActivity : AppCompatActivity() {
         val seconds = totalSeconds % 60
 
         totalFocusTImeView.text = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
+        Log.d("UI_UPDATE", "Updated total focus time: $hours:$minutes:$seconds")
     }
 
 
@@ -444,6 +472,45 @@ class MainActivity : AppCompatActivity() {
             snackbar.dismiss()
         }, duration)
     }
+
+    //타이머 종료 시 roomDB에 저장
+    private fun saveFocusTimeToDatabase(date: String, focusTimeInMillis: Long) {
+        if (focusTimeInMillis > 0) { // 0 이상인 경우에만 저장
+            val record = TimerRecords(date = date, totalFocusTime = focusTimeInMillis)
+            timerViewModel.insertOrUpdateRecord(record)
+            Log.d("DATABASE_SAVE", "Saving focus time: $focusTimeInMillis ms for date: $date")
+        } else {
+            Log.d("DATABASE_SAVE", "No focus time to save for date: $date")
+        }
+    }
+
+
+
+    //총 집중 시간 하루동안 UI에 저장되게 하는 코드
+    private fun loadTodayFocusTime() {
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())
+
+        timerViewModel.allRecords.observe(this) { records ->
+            val todayRecord = records.find { it.date == today }
+            val totalFocusTimeFromDB = todayRecord?.totalFocusTime ?: 0L // ms 값 그대로 가져오기
+
+
+            // ms -> 초 변환
+            this.totalFocusTimeInSeconds = totalFocusTimeFromDB / 1000
+            // UI 업데이트
+            updateTotalFocusTimeUI(this.totalFocusTimeInSeconds)
+            Log.d("LOAD_DATA", "Loaded focus time: ${this.totalFocusTimeInSeconds} seconds for date: $today")
+
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 }
