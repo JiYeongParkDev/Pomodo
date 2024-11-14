@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Pomodo</string>
+    <string name="timer_open">타이머 열기</string>
+    <string name="leaderBoard_open">기록 열기</string>
+    <string name="checkList_open">플래너 열기</string>
+    <string name="circle_frame">타이머 틀 모양</string>
+    <string name="timer_start_button">타이머 시작 버튼</string>
+    <string name="timer_stop_button">타이머 정지 버튼</string>
+    <string name="total_focus_time">00:00:00</string>
+    <string name="focus_time">00:00</string>
+    <string name="break_time">00:00</string>
+    <string name="reset_button">"타이머 초기화 버튼"</string>
+
+    <string name="hint_focus_time">집중 시간을 입력해주세요.</string>
+    <string name="hint_break_time">휴식 시간을 입력해주세요.</string>
+    <string name="hint_repeat_count">반복 횟수를 설정해주세요.</string>
+    <string name="set_repeat_count">반복 횟수</string>
+    <string name="dialog_focus_time">집중 시간</string>
+    <string name="dialog_break_time">휴식 시간</string>
+</resources>

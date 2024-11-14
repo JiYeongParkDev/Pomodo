@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="MainActivity">
+
+
+<ImageView
+    android:id="@+id/timer"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginBottom="20dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:srcCompat="@drawable/timer"
+    android:contentDescription="@string/timer_open"
+    />
+
+<ImageView
+    android:id="@+id/leaderBoard"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="20dp"
+    android:src="@drawable/leaderboard"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:contentDescription="@string/leaderBoard_open"
+    />
+
+<ImageView
+    android:id="@+id/checkList"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+
+    android:layout_marginBottom="20dp"
+    android:contentDescription="@string/checkList_open"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/leaderBoard"
+    app:layout_constraintStart_toEndOf="@+id/timer"
+    app:srcCompat="@drawable/checklist"
+    />
+
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:contentDescription="@string/circle_frame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.414"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageView
+        android:id="@+id/startButton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:contentDescription="@string/timer_start_button"
+        android:src="@drawable/startbutton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/circle"
+        app:layout_constraintVertical_bias="0.155" />
+
+<ImageView
+    android:id="@+id/stopButton"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:visibility="gone"
+    android:contentDescription="@string/timer_stop_button"
+    android:src="@drawable/stopbutton"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/circle"
+    app:layout_constraintVertical_bias="0.155" />
+
+<TextView
+    android:id="@+id/focusTime"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/focus_time"
+    app:layout_constraintBottom_toBottomOf="@+id/circle"
+    app:layout_constraintEnd_toEndOf="@+id/circle"
+    app:layout_constraintStart_toStartOf="@+id/circle"
+    app:layout_constraintTop_toTopOf="@+id/circle"
+    android:textSize="35sp"
+    />
+
+<TextView
+    android:id="@+id/breakTime"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/break_time"
+    android:textSize="25sp"
+    app:layout_constraintBottom_toTopOf="@+id/focusTime"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/circle"
+    app:layout_constraintVertical_bias="0.673" />
+
+<TextView
+    android:id="@+id/totalFocusTimeView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/total_focus_time"
+    android:textSize="25sp"
+    app:layout_constraintTop_toBottomOf="@+id/focusTime"
+    app:layout_constraintBottom_toBottomOf="@+id/circle"
+    app:layout_constraintEnd_toEndOf="@+id/circle"
+    app:layout_constraintStart_toStartOf="@+id/circle"
+    app:layout_constraintVertical_bias="0.3"
+    />
+
+
+    <Chronometer
+        android:id="@+id/totalFocusTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/circle"
+        app:layout_constraintEnd_toEndOf="@+id/circle"
+        app:layout_constraintStart_toStartOf="@+id/circle"
+        app:layout_constraintTop_toBottomOf="@+id/focusTime"
+        android:visibility="gone"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <ImageView
+    android:id="@+id/resetButton"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:src="@drawable/resetbutton"
+    android:contentDescription="@string/reset_button"
+    android:visibility="gone"
+    app:layout_constraintTop_toTopOf="@+id/circle"
+    app:layout_constraintEnd_toEndOf="@+id/circle"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

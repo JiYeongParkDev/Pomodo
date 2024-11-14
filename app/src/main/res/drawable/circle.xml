@@ -1,0 +1,10 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <solid android:color="@android:color/transparent"/> <!-- 배경을 투명하게 설정 -->
+
+    <stroke
+        android:width="30dp"
+        android:color="#5f6368"/>
+
+</shape>
