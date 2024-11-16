@@ -17,4 +17,9 @@
     <string name="set_repeat_count">반복 횟수</string>
     <string name="dialog_focus_time">집중 시간</string>
     <string name="dialog_break_time">휴식 시간</string>
+    <string name="prevMonthButton">&lt;</string>
+    <string name="nextMonthButton">&gt;</string>
+    <string name="month_year_format">%1$d년 %2$d월</string>s
+
+
 </resources>

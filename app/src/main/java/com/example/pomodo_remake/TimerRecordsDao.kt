@@ -26,5 +26,12 @@ interface TimerRecordsDao {
     @Query("DELETE FROM TimerRecords WHERE date = :targetDate")
     suspend fun deleteRecordByDate(targetDate: String)
 
-    
+    //특정 월의 데이터만 가져오는 함수(기존 데이터를 모두 가져오고 싶지 않으면 사용)
+    @Query("SELECT * FROM TimerRecords WHERE date BETWEEN :startDate AND :endDate")
+    suspend fun getRecordsForDateRange(startDate: String, endDate: String): List<TimerRecords>
+
+
+
+
+
 }
