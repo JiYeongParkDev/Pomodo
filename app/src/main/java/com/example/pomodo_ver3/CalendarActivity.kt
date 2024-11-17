@@ -1,10 +1,10 @@
 package com.example.pomodo_ver3
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.GridLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -15,11 +15,14 @@ import java.util.Calendar
 
 class CalendarActivity : AppCompatActivity() {
 
-    private val emojiMap = mutableMapOf<Int, Int>() // 날짜와 선택된 이모지 저장
+    private val emojiMap = mutableMapOf<Int, String>() // 날짜와 선택된 이모지 저장
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // 레이아웃 파일 수정된 파일 이름
+
+        // 저장된 이모지 데이터를 불러오기
+        loadEmojiData()
 
         val calendarGrid = findViewById<GridLayout>(R.id.calendarGrid)
         addDatesToCalendar(calendarGrid)
@@ -76,8 +79,8 @@ class CalendarActivity : AppCompatActivity() {
         }
 
         // 이모지가 저장된 경우 해당 이모지 설정
-        emojiMap[day]?.let { emojiRes ->
-            emojiView.text = getString(emojiRes)
+        emojiMap[day]?.let { emoji ->
+            emojiView.text = emoji
         }
 
         dayLayout.addView(dayText)
@@ -86,7 +89,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun showEmojiSelectionDialog(day: Int, dayView: LinearLayout) {
-        val emojiList = arrayOf("😍","😄","😊","🤔","😡") // 이모지 리스트
+        val emojiList = arrayOf("😍", "😄", "😊", "🤔", "😡") // 이모지 리스트
 
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_emoji_selection, null)
         val emojiContainer = dialogView.findViewById<LinearLayout>(R.id.emoji_container)
@@ -115,11 +118,30 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun setEmojiForDay(day: Int, emoji: String, dayView: LinearLayout) {
         // 이모지 설정
-        emojiMap[day] = emoji.codePointAt(0) // 이모지 저장
+        emojiMap[day] = emoji // 선택된 이모지 저장
+        saveEmojiData() // 데이터 저장
 
         // View에 이모지 업데이트
         val emojiView = dayView.getChildAt(1) as TextView
         emojiView.text = emoji
+    }
+
+    // SharedPreferences에 이모지 데이터를 저장하는 함수
+    private fun saveEmojiData() {
+        val sharedPreferences = getSharedPreferences("emoji_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        emojiMap.forEach { (day, emoji) ->
+            editor.putString(day.toString(), emoji)
+        }
+        editor.apply()
+    }
+
+    // SharedPreferences에서 이모지 데이터를 불러오는 함수
+    private fun loadEmojiData() {
+        val sharedPreferences = getSharedPreferences("emoji_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.all.forEach { (day, emoji) ->
+            emojiMap[day.toInt()] = emoji.toString()
+        }
     }
 
     private fun convertDpToPx(dp: Int): Int {
