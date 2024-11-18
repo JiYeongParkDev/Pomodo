@@ -13,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pomodo_ver3"
         tools:targetApi="31">
+
+        <!-- MainActivity (기본 플래너 화면) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -20,10 +22,17 @@
             android:theme="@style/Theme.Pomodo_ver3">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- CalendarActivity (달력 화면) -->
+        <activity
+            android:name=".CalendarActivity"
+            android:exported="true"
+            android:label="Calendar"
+            android:theme="@style/Theme.Pomodo_ver3" />
+
     </application>
 
 </manifest>

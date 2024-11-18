@@ -1,6 +1,7 @@
 package com.example.pomodo_ver3
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private val tasksMap = mutableMapOf<String, MutableList<Task>>() // 날짜별 할 일(Task 객체) 저장
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 상태바 숨기기
@@ -52,6 +54,32 @@ class MainActivity : AppCompatActivity() {
                 )
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.layout) // XML 레이아웃 파일 설정
+
+        // 하단 아이콘 연결
+        val timerIcon = findViewById<ImageView>(R.id.timerIcon) // 타이머 아이콘
+        val checklistIcon = findViewById<ImageView>(R.id.checklistIcon) // 체크리스트 아이콘
+        val leaderBoardIcon = findViewById<ImageView>(R.id.calendarViewIcon) // 기록 보기 아이콘
+
+        // 타이머 화면으로 이동 (추후 구현)
+        timerIcon.setOnClickListener {
+            Log.d("ICON_CLICK", "타이머 아이콘 클릭됨, TimerActivity로 이동 준비")
+            // TimerActivity가 준비되지 않았으므로 주석 처리
+            // val intent = Intent(this, TimerActivity::class.java)
+            // startActivity(intent)
+            Log.d("ICON_CLICK", "TimerActivity는 아직 구현되지 않았습니다.")
+        }
+
+        // 체크리스트 화면 (현재 이 화면) - 클릭 시 동작 없음
+        checklistIcon.setOnClickListener {
+            Log.d("ICON_CLICK", "체크리스트 아이콘 클릭됨, 현재 화면 유지")
+        }
+
+        // 기록 보기 화면으로 이동 (CalendarActivity)
+        leaderBoardIcon.setOnClickListener {
+            Log.d("ICON_CLICK", "기록 보기 아이콘 클릭됨, CalendarActivity로 이동")
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+        }
 
         // 레이아웃의 뷰 참조
         addTaskButton = findViewById(R.id.addText) // + 버튼 참조
