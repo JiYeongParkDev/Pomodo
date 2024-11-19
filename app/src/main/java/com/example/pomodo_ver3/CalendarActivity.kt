@@ -63,6 +63,9 @@ class CalendarActivity : AppCompatActivity() {
         val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 요일(일요일: 1)
         calendarGrid.removeAllViews()
 
+        // 요일 헤더 추가
+        addWeekdayHeadersToCalendar(calendarGrid)
+
         // 빈칸 추가 (달의 첫날이 시작하는 요일 맞추기)
         for (i in 0 until firstDayOfWeek) {
             calendarGrid.addView(createEmptyDayView())
@@ -76,6 +79,31 @@ class CalendarActivity : AppCompatActivity() {
             dayView.setOnClickListener {
                 showEmojiSelectionDialog(day, dayView)
             }
+        }
+    }
+
+    private fun addWeekdayHeadersToCalendar(calendarGrid: GridLayout) {
+        val weekdays = arrayOf("S", "M", "T", "W", "T", "F", "S") // 요일 배열
+        weekdays.forEachIndexed { index,day ->
+            val dayHeader = TextView(this).apply {
+                text = day
+                textSize = 16f
+                gravity = Gravity.CENTER
+
+                // 주말 색상 조건 설정
+                setTextColor(
+                    if (index == 0 || index == 6) // "S"는 주말 (첫 번째와 마지막 요일)
+                        ContextCompat.getColor(context, android.R.color.holo_red_dark) // 빨간색
+                    else
+                        ContextCompat.getColor(context, android.R.color.black) // 검은색
+                )
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = convertDpToPx(48)
+                    height = convertDpToPx(32)
+                    setMargins(8, 4, 8, 4)
+                }
+            }
+            calendarGrid.addView(dayHeader)
         }
     }
 
