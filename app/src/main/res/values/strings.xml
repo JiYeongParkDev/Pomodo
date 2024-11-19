@@ -19,7 +19,12 @@
     <string name="dialog_break_time">휴식 시간</string>
     <string name="prevMonthButton">&lt;</string>
     <string name="nextMonthButton">&gt;</string>
-    <string name="month_year_format">%1$d년 %2$d월</string>s
-
-
+    <string name="month_year_format">%1$d년 %2$d월</string>
+    <string name="planner_text">Planner</string>
+        <string name="edit_text">편집</string>
+        <string name="plus_text">+</string>
+        <string name="timer_icon_desc">Timer icon</string>
+        <string name="checklist_icon_desc">Checklist icon</string>
+        <string name="leaderboard_icon_desc">Leaderboard icon</string>
+        <string name="calendar_icon_desc">calendar_icon_desc</string>
 </resources>
