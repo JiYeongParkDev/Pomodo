@@ -16,5 +16,5 @@
         android:id="@+id/editTaskName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="할 일을 입력하세요"/>
+        android:hint="할 일을 입력하세요!"/>
 </LinearLayout>
