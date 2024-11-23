@@ -97,9 +97,20 @@ class TimerForegroundService : Service(){
         val contentText = "${minutes}분 ${seconds}초 남음"
 
 
+        // 알림 클릭 시 MainActivity로 이동
+        val notificationIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP // 기존 액티비티 재사용
+            putExtra("IS_FOCUS_TIMER", title == "집중 타이머") // 추가 데이터 전달
+            putExtra("REMAINING_TIME", remainingTime)
+            putExtra("TOTAL_FOCUS_TIME", totalFocusTime)
+        }
+
 
         Log.d("TimerForegroundService", "Creating notification with title: $title, content: $contentText")
 
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(title)                 // 알림 제목 설정
@@ -107,6 +118,7 @@ class TimerForegroundService : Service(){
             .setStyle(NotificationCompat.BigTextStyle().bigText(contentText)) // 본문 확장 가능
             .setSmallIcon(R.drawable.timer)      // 알림 아이콘
             .setPriority(NotificationCompat.PRIORITY_LOW) // 낮은 우선순위
+            .setContentIntent(pendingIntent)
             .setOngoing(true)                       // 알림을 고정 상태로 설정
             .build()
     }

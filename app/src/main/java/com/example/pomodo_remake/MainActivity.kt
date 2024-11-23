@@ -576,6 +576,13 @@ class MainActivity : AppCompatActivity() {
 
     //SharedPreferences에서 데이터를 읽어 복원하기 위한 함수
     private fun restoreTimerState() {
+        // 날짜 변경 확인 및 초기화
+        if (checkAndResetIfNewDay()) {
+            // 날짜가 변경된 경우 초기화된 데이터를 SharedPreferences에 저장
+            saveTimerState()
+            Log.d("RESTORE_TIMER", "New day detected. Timer state reset and saved.")
+        }
+
         // 저장된 값 복원, 없으면 기본값 사용
         focusTime = sharedPreferences.getLong("focusTime", 25 * 60 * 1000L) // 기본값 25분
         breakTime = sharedPreferences.getLong("breakTime", 5 * 60 * 1000L) // 기본값 5분
@@ -644,8 +651,6 @@ class MainActivity : AppCompatActivity() {
         // SharedPreferences에서 저장된 상태 복원
         restoreTimerState()
 
-        checkAndResetIfNewDay() // 날짜 변경 확인 및 초기화
-
         // UI 업데이트
         updateFocusTimeUI(focusRemainingTime)
         updateBreakTimeUI(breakRemainingTime)
@@ -703,7 +708,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     //날짜가 바뀌면 총 집중 시간 UI초기화, 집중 시간, 휴식 시간, 반복횟수도 설정을 기본값으로 리셋되게 하는 함수
-    private fun checkAndResetIfNewDay() {
+    private fun checkAndResetIfNewDay():Boolean{
+
         val sharedPreferences = getSharedPreferences("TimerPreferences", Context.MODE_PRIVATE)
         val lastResetDate = sharedPreferences.getString("lastResetDate", null)
 
@@ -715,7 +721,12 @@ class MainActivity : AppCompatActivity() {
 
             // 새로운 날짜를 저장
             sharedPreferences.edit().putString("lastResetDate", today).apply()
+            Log.d("RESET_TIMER", "New day detected. Timer reset.")
+
+            return true // 날짜가 변경되었음을 반환
         }
+        Log.d("RESET_TIMER", "Same day. No reset needed.")
+        return false // 날짜가 변경되지 않았음을 반환
     }
 
     //집중 시간, 휴식 시간, 반복횟수, 총 집중 시간을 기본값으로 초기화하는 메서드
@@ -736,6 +747,30 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("RESET_TIMER", "Timer settings and total focus time reset to default values.")
     }
+
+    //알림 클릭 시 MainActivity로 데이터를 전달받아 UI를 업데이트하도록 하는 함수
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        // 알림 클릭 시 전달된 데이터를 처리
+        intent?.let {
+            val isFocusTimer = it.getBooleanExtra("IS_FOCUS_TIMER", true)
+            val remainingTime = it.getLongExtra("REMAINING_TIME", 0L)
+            val totalFocusTime = it.getLongExtra("TOTAL_FOCUS_TIME", 0L)
+
+            Log.d("MainActivity", "onNewIntent: isFocusTimer=$isFocusTimer, remainingTime=$remainingTime, totalFocusTime=$totalFocusTime")
+
+            // UI 업데이트
+            if (isFocusTimer) {
+                updateFocusTimeUI(remainingTime)
+            } else {
+                updateBreakTimeUI(remainingTime)
+            }
+            updateTotalFocusTimeUI(totalFocusTime)
+        }
+    }
+
+
 
 
 
