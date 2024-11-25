@@ -360,18 +360,18 @@ class MainActivity : AppCompatActivity() {
             .setTitle("시간 설정")
             .setView(dialogView)
             .setPositiveButton("확인") { _, _ ->
-                val focusTimeInputValue = focusTimeInput.text.toString().toLongOrNull()
-                val breakTimeInputValue = breakTimeInput.text.toString().toLongOrNull()
+                val focusTimeInputValue = focusTimeInput.text.toString().toDoubleOrNull()
+                val breakTimeInputValue = breakTimeInput.text.toString().toDoubleOrNull()
                 val repeatCountInputValue = repeatCountInput.text.toString().toIntOrNull()
 
-                focusTime = if (focusTimeInputValue != null && focusTimeInputValue in 1..120) {
-                    focusTimeInputValue * 60 * 1000 // 밀리초 단위로 변환
+                focusTime = if (focusTimeInputValue != null && focusTimeInputValue in 0.1..120.0) {
+                    (focusTimeInputValue * 60 * 1000).toLong() // 밀리초 단위로 변환
                 } else {
                     25 * 60 * 1000 // 기본값 25분
                 }
 
-                breakTime = if (breakTimeInputValue != null && breakTimeInputValue in 1..60) {
-                    breakTimeInputValue * 60 * 1000 // 밀리초 단위로 변환
+                breakTime = if (breakTimeInputValue != null && breakTimeInputValue in 0.1..60.0) {
+                    (breakTimeInputValue * 60 * 1000).toLong() // 밀리초 단위로 변환
                 } else {
                     5 * 60 * 1000 // 기본값 5분
                 }
@@ -406,8 +406,8 @@ class MainActivity : AppCompatActivity() {
 
         // 다이얼로그 표시 후 값 설정
         dialog.setOnShowListener {
-            focusTimeInput.setText((focusTime / 60000).toString())
-            breakTimeInput.setText((breakTime / 60000).toString())
+            focusTimeInput.setText((focusTime / 60000.0).toString())
+            breakTimeInput.setText((breakTime / 60000.0).toString())
             repeatCountInput.setText(repeatCount.toString())
         }
 
