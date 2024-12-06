@@ -27,6 +27,9 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import android.Manifest
 import android.content.IntentFilter
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 
 
 class MainActivity : AppCompatActivity() {
@@ -240,7 +243,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Snackbar를 중앙에 표시
                 val rootView = findViewById<View>(R.id.main) // 루트 레이아웃 ID
-                showCenteredSnackbar(rootView, "집중 타이머 종료", 1500L)  //1.5초동안 타이머 종료 되었다고 뜸
+                showCenteredSnackbar(rootView, "집중 타이머 종료", 1500L,this@MainActivity)  //1.5초동안 타이머 종료 되었다고 뜸
 
 
                 startBreakTimer()           // 타이머 종료 후 휴식 타이머 시작
@@ -283,7 +286,7 @@ class MainActivity : AppCompatActivity() {
                 updateBreakTimeUI(0)
 
                 val rootView = findViewById<View>(R.id.main) // 루트 레이아웃
-                showCenteredSnackbar(rootView, "휴식 타이머 종료", 1500L) // 1.5초 동안 알림 표시
+                showCenteredSnackbar(rootView, "휴식 타이머 종료", 1500L,this@MainActivity) // 1.5초 동안 알림 표시
 
                 checkRepeat() // 반복 횟수 확인 및 다음 단계 실행
             }
@@ -502,7 +505,14 @@ class MainActivity : AppCompatActivity() {
 
 
     // (집중/휴식)시간 종료 알림 텍스트
-    fun showCenteredSnackbar(view: View, message: String, duration: Long) {
+    fun showCenteredSnackbar(view: View, message: String, duration: Long, context: Context) {
+        // 시스템 기본 알림 소리 가져오기
+        val notificationUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val ringtone: Ringtone = RingtoneManager.getRingtone(context, notificationUri)
+
+        // 알림 소리 재생
+        ringtone.play()
+
         val snackbar = Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE)
 
         // Snackbar의 레이아웃 수정
@@ -513,9 +523,12 @@ class MainActivity : AppCompatActivity() {
 
         snackbar.show()
 
-        // 지정된 시간 후 스낵바 닫기
+        // 지정된 시간 후 스낵바 닫기 및 소리 중지
         snackbarView.postDelayed({
             snackbar.dismiss()
+            if (ringtone.isPlaying) {
+                ringtone.stop() // 소리 중지
+            }
         }, duration)
     }
 
