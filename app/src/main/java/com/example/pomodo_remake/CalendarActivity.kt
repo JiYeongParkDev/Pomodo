@@ -130,6 +130,7 @@ class CalendarActivity : AppCompatActivity(){
         for (day in daysOfWeek) {
             val headerView = TextView(this).apply {
                 text = day
+
                 gravity = Gravity.CENTER
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
@@ -183,6 +184,7 @@ class CalendarActivity : AppCompatActivity(){
                     height = 100
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
+
                 setBackgroundColor(getColorBasedOnFocusTime(focusTime))
                 setTextColor(Color.BLACK)
             }
@@ -220,6 +222,8 @@ class CalendarActivity : AppCompatActivity(){
         timerViewModel.loadFocusTimesForMonth(currentYear, currentMonth)
     }
 
+
+    /*
     //새로 추가된 이모지 부분
     private fun generateSimpleCalendar() {
         emojiCalendarCardView.removeAllViews()
@@ -236,6 +240,7 @@ class CalendarActivity : AppCompatActivity(){
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
                 setTextColor(if (day == "S") Color.RED else Color.BLACK)
+                textSize = 12f
             }
             emojiCalendarCardView.addView(headerView)
         }
@@ -253,9 +258,11 @@ class CalendarActivity : AppCompatActivity(){
                 gravity = Gravity.CENTER
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
-                    height = 100
+                    height = 120
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
+                setPadding(0, 20, 0, 20) // 위아래 패딩 추가로 간격 조정
+                textSize = 10f
                 setTextColor(Color.BLACK)
 
                 if (i >= blankDays) {
@@ -270,9 +277,103 @@ class CalendarActivity : AppCompatActivity(){
             emojiCalendarCardView.addView(dayView)
         }
 
+    }*/
+
+    //새로 추가된 이모지 부분
+    private fun generateSimpleCalendar() {
+        emojiCalendarCardView.removeAllViews()
+
+        // 요일 헤더 추가
+        val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
+        for (day in daysOfWeek) {
+            val headerView = TextView(this).apply {
+                text = day
+                gravity = Gravity.CENTER
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = 100
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                }
+                textSize = 12f
+                setTextColor(if (day == "S") Color.RED else Color.BLACK)
+            }
+            emojiCalendarCardView.addView(headerView)
+        }
+
+        // 빈 칸과 날짜 추가
+        val firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1)
+        val dayOfWeek = firstDayOfMonth.dayOfWeek.value % 7 // 일요일(0) ~ 토요일(6)
+        val blankDays = dayOfWeek
+        val daysInMonth = YearMonth.of(currentYear, currentMonth).lengthOfMonth()
+        val totalCells = blankDays + daysInMonth
+
+        for (i in 0 until totalCells) {
+            if (i < blankDays) {
+                // 빈 칸 추가
+                val emptyView = TextView(this).apply {
+                    text = ""
+                    gravity = Gravity.CENTER
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        width = 0
+                        height = 100
+                        columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    }
+                }
+                emojiCalendarCardView.addView(emptyView)
+            } else {
+                // 날짜와 이모지를 포함하는 LinearLayout 생성
+                val container = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                    gravity = Gravity.CENTER
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        width = 0
+                        height = 100
+                        columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    }
+                }
+
+                val day = i - blankDays + 1
+
+                // 날짜 TextView 생성
+                val dateView = TextView(this).apply {
+                    text = day.toString()
+                    gravity = Gravity.CENTER
+                    textSize = 10f
+                    setTextColor(Color.BLACK)
+                }
+
+                // 이모지 TextView 생성
+                val emojiView = TextView(this).apply {
+                    text = "" // 초기 상태에선 이모지가 없음
+                    gravity = Gravity.CENTER
+                    textSize = 15f
+                }
+
+                // 클릭 시 이모지 선택 다이얼로그 표시
+                container.setOnClickListener {
+                    showEmojiSelectionDialog(day) { selectedEmoji ->
+                        emojiView.text = selectedEmoji // 선택한 이모지를 표시
+                        saveEmojiToDatabase(getDateKey(day), selectedEmoji) // DB에 저장
+                    }
+                }
+
+                // Room DB에서 이모지 로드
+                loadEmojiForDate(day) { loadedEmoji ->
+                    emojiView.text = loadedEmoji // 저장된 이모지가 있으면 표시
+                }
+
+                // 컨테이너에 날짜와 이모지 추가
+                container.addView(dateView)
+                container.addView(emojiView)
+
+                // GridLayout에 컨테이너 추가
+                emojiCalendarCardView.addView(container)
+            }
+        }
+
     }
 
-    private fun showEmojiSelectionDialog(day: Int, dayView: TextView) {
+    private fun showEmojiSelectionDialog(day: Int, onEmojiSelected: (String) -> Unit) {
         val emojiList = arrayOf("😍", "😄", "😊", "🤔", "😡") // 이모지 리스트
 
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_emoji_selection, null)
@@ -291,8 +392,8 @@ class CalendarActivity : AppCompatActivity(){
                 gravity = Gravity.CENTER
                 setOnClickListener {
                     val dateKey = getDateKey(day)
-                    saveEmojiToDatabase(dateKey, emoji) // 이모지를 RoomDB에 저장
-                    dayView.text = "$day\n$emoji" // 날짜 아래에 이모지 표시
+                    onEmojiSelected(emoji) // 콜백을 통해 선택된 이모지를 전달
+                    //dayView.text = "$day\n$emoji" // 날짜 아래에 이모지 표시
                     dialog.dismiss()
                 }
             }
@@ -310,14 +411,14 @@ class CalendarActivity : AppCompatActivity(){
         }
     }
 
-    private fun loadEmojiForDate(day: Int, dayView: TextView) {
+    private fun loadEmojiForDate(day: Int, onEmojiLoaded: (String?) -> Unit) {
         val database = AppDatabase.getDatabase(this)
         val dateKey = getDateKey(day) // 날짜를 `YYYY-MM-DD` 형식으로 생성
         CoroutineScope(Dispatchers.IO).launch {
             val emoji = database.calendarEmojiDao().getEmojiForDate(dateKey)?.emoji
             emoji?.let {
                 runOnUiThread {
-                    dayView.text = "$day\n$it" // 날짜 아래에 이모지를 표시
+                    onEmojiLoaded(emoji) // 이모지를 콜백으로 전달
                 }
             }
         }

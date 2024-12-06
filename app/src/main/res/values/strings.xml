@@ -11,8 +11,8 @@
     <string name="break_time">00:00</string>
     <string name="reset_button">"타이머 초기화 버튼"</string>
 
-    <string name="hint_focus_time">집중 시간을 입력해주세요.</string>
-    <string name="hint_break_time">휴식 시간을 입력해주세요.</string>
+    <string name="hint_focus_time">집중 시간(분)을 입력해주세요.</string>
+    <string name="hint_break_time">휴식 시간(분)을 입력해주세요.</string>
     <string name="hint_repeat_count">반복 횟수를 설정해주세요.</string>
     <string name="set_repeat_count">반복 횟수</string>
     <string name="dialog_focus_time">집중 시간</string>
@@ -27,4 +27,5 @@
         <string name="checklist_icon_desc">Checklist icon</string>
         <string name="leaderboard_icon_desc">Leaderboard icon</string>
         <string name="calendar_icon_desc">calendar_icon_desc</string>
+    <string name="onboarding_image_description">타이머 화면 이미지</string>
 </resources>
