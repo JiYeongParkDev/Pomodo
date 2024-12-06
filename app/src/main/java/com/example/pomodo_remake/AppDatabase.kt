@@ -61,10 +61,14 @@ abstract class AppDatabase : RoomDatabase() {
                 val database = getDatabase(context)
                 CoroutineScope(Dispatchers.IO).launch {
                     database.timerRecordsDao().apply {
-                        insertOrUpdateRecord(TimerRecords("2024-10-02", 45 * 60 * 1000L))
-                        insertOrUpdateRecord(TimerRecords("2024-10-03", 120 * 60 * 1000L))
-                        insertOrUpdateRecord(TimerRecords("2024-10-07", 30 * 60 * 1000L))
-                        insertOrUpdateRecord(TimerRecords("2024-10-08", 90 * 60 * 1000L))
+                        insertOrUpdateRecord(TimerRecords("2024-10-07", 15 * 60 * 1000L)) // 15분 (1초 ~ 30분 색상: #F0F8FF)
+                        insertOrUpdateRecord(TimerRecords("2024-10-08", 45 * 60 * 1000L)) // 45분 (30분 1초 ~ 1시간 색상: #CBEAF9)
+                        insertOrUpdateRecord(TimerRecords("2024-10-09", 90 * 60 * 1000L)) // 1시간 30분 (1시간 1초 ~ 2시간 색상: #B7E1F9)
+                        insertOrUpdateRecord(TimerRecords("2024-10-10", 3 * 60 * 60 * 1000L)) // 3시간 (2시간 1초 ~ 4시간 색상: #A2D6F8)
+                        insertOrUpdateRecord(TimerRecords("2024-10-11", 5 * 60 * 60 * 1000L)) // 5시간 (4시간 1초 ~ 6시간 색상: #8DCBF7)
+                        insertOrUpdateRecord(TimerRecords("2024-10-21", 7 * 60 * 60 * 1000L)) // 7시간 (6시간 1초 ~ 8시간 색상: #79C0F7)
+                        insertOrUpdateRecord(TimerRecords("2024-10-22", 10 * 60 * 60 * 1000L)) // 10시간 (8시간 1초 ~ 20시간 색상: #64B5F6)
+
                     }
                 }
             }
