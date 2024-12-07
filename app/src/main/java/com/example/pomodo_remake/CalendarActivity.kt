@@ -47,7 +47,6 @@ class CalendarActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_calendar)  // 원래 내꺼!!!
         setContentView(R.layout.activity_calendar_combined) // 통합 레이아웃 사용
 
         timerIcon = findViewById(R.id.timer)
@@ -201,7 +200,7 @@ class CalendarActivity : AppCompatActivity(){
     }
 
 
-    // 총 집중 시간에 따라 색상 계산
+    /*// 총 집중 시간에 따라 색상 계산
     private fun getColorBasedOnFocusTime(focusTime: Int): Int {
         return when (focusTime) {
             in 0..0 -> Color.WHITE // 기본값
@@ -214,7 +213,24 @@ class CalendarActivity : AppCompatActivity(){
             in 28801..72000 -> Color.parseColor("#64B5F6") // 8시간 1초 ~ 20시간
             else -> Color.WHITE // 예상치 못한 값에 대한 기본값
         }
+    }*/
+
+    //색깔 한 번 바꿔볼까 해서 넣어본코드
+    // 총 집중 시간에 따라 색상 계산
+    private fun getColorBasedOnFocusTime(focusTime: Int): Int {
+        return when (focusTime) {
+            in 0..0 -> Color.WHITE // 기본값
+            in 1..1800 -> Color.parseColor("#F0F8FF") // 1초 ~ 30분
+            in 1801..3600 -> Color.parseColor("#CBEAF9") // 30분 1초 ~ 1시간
+            in 3601..7200 -> Color.parseColor("#B7E1F9") // 1시간 1초 ~ 2시간
+            in 7201..14400 -> Color.parseColor("#A2D6F8") // 2시간 1초 ~ 4시간
+            in 14401..21600 -> Color.parseColor("#64B5F6") // 4시간 1초 ~ 6시간 (밝은 파란색)
+            in 21601..28800 -> Color.parseColor("#549DE6") // 6시간 1초 ~ 8시간 (중간 파란색)
+            in 28801..72000 -> Color.parseColor("#3C77C4") // 8시간 1초 ~ 20시간 (짙은 파란색)
+            else -> Color.parseColor("#2F5EA3") // 20시간 초과 (어두운 파란색)
+        }
     }
+
 
     // 기록 부분 액티비티가 다시 열릴때 해당 월의 데이터를 강제로 다시 로드함
     override fun onResume() {
