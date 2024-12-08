@@ -1,6 +1,5 @@
 package com.example.pomodo_remake
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -15,17 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.lifecycle.ViewModelProvider
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Locale
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
-import java.util.*
 
 class CalendarActivity : AppCompatActivity(){
     private lateinit var viewModel: CalendarViewModel
@@ -48,6 +43,16 @@ class CalendarActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_combined) // 통합 레이아웃 사용
+
+        // 상태바와 내비게이션 바를 완전히 투명하게 설정
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // 아이콘을 검정색으로 설정
+                )
+        window.statusBarColor = Color.TRANSPARENT // 상태바 투명
+        window.navigationBarColor = Color.TRANSPARENT // 내비게이션 바 투명
 
         timerIcon = findViewById(R.id.timer)
         checkListIcon = findViewById(R.id.checkList)
@@ -200,21 +205,6 @@ class CalendarActivity : AppCompatActivity(){
     }
 
 
-    /*// 총 집중 시간에 따라 색상 계산
-    private fun getColorBasedOnFocusTime(focusTime: Int): Int {
-        return when (focusTime) {
-            in 0..0 -> Color.WHITE // 기본값
-            in 1..1800 -> Color.parseColor("#F0F8FF") // 1초 ~ 30분
-            in 1801..3600 -> Color.parseColor("#CBEAF9") // 30분 1초 ~ 1시간
-            in 3601..7200 -> Color.parseColor("#B7E1F9") // 1시간 1초 ~ 2시간
-            in 7201..14400 -> Color.parseColor("#A2D6F8") // 2시간 1초 ~ 4시간
-            in 14401..21600 -> Color.parseColor("#8DCBF7") // 4시간 1초 ~ 6시간
-            in 21601..28800 -> Color.parseColor("#79C0F7") // 6시간 1초 ~ 8시간
-            in 28801..72000 -> Color.parseColor("#64B5F6") // 8시간 1초 ~ 20시간
-            else -> Color.WHITE // 예상치 못한 값에 대한 기본값
-        }
-    }*/
-
     //색깔 한 번 바꿔볼까 해서 넣어본코드
     // 총 집중 시간에 따라 색상 계산
     private fun getColorBasedOnFocusTime(focusTime: Int): Int {
@@ -238,62 +228,6 @@ class CalendarActivity : AppCompatActivity(){
         timerViewModel.loadFocusTimesForMonth(currentYear, currentMonth)
     }
 
-
-    /*
-    //새로 추가된 이모지 부분
-    private fun generateSimpleCalendar() {
-        emojiCalendarCardView.removeAllViews()
-
-        // 요일 헤더 추가
-        val daysOfWeek = listOf("S", "M", "T", "W", "T", "F", "S")
-        for (day in daysOfWeek) {
-            val headerView = TextView(this).apply {
-                text = day
-                gravity = Gravity.CENTER
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = 100
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                }
-                setTextColor(if (day == "S") Color.RED else Color.BLACK)
-                textSize = 12f
-            }
-            emojiCalendarCardView.addView(headerView)
-        }
-
-        // 빈 칸과 날짜 추가
-        val firstDayOfMonth = LocalDate.of(currentYear, currentMonth, 1)
-        val dayOfWeek = firstDayOfMonth.dayOfWeek.value % 7 // 일요일(0) ~ 토요일(6)
-        val blankDays = dayOfWeek
-        val daysInMonth = YearMonth.of(currentYear, currentMonth).lengthOfMonth()
-        val totalCells = blankDays + daysInMonth
-
-        for (i in 0 until totalCells) {
-            val dayView = TextView(this).apply {
-                text = if (i >= blankDays) (i - blankDays + 1).toString() else "" // 빈 칸 또는 날짜
-                gravity = Gravity.CENTER
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = 120
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                }
-                setPadding(0, 20, 0, 20) // 위아래 패딩 추가로 간격 조정
-                textSize = 10f
-                setTextColor(Color.BLACK)
-
-                if (i >= blankDays) {
-                    val day = i - blankDays + 1
-                    setOnClickListener {
-                        showEmojiSelectionDialog(day, this) // 다이얼로그를 표시
-                    }
-                    loadEmojiForDate(day, this) // 저장된 이모지를 불러와서 표시
-                }
-
-            }
-            emojiCalendarCardView.addView(dayView)
-        }
-
-    }*/
 
     //새로 추가된 이모지 부분
     private fun generateSimpleCalendar() {

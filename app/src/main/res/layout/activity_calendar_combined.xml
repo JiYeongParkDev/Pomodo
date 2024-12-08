@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="30dp" />
 
     <!-- 이전 달 버튼 -->
     <Button
@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@id/monthYearTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:backgroundTint="#5f6368"
         />
 
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@id/monthYearTextView"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:backgroundTint="#5f6368"
         />
 

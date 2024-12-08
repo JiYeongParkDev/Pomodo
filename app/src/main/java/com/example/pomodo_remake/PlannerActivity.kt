@@ -2,6 +2,7 @@ package com.example.pomodo_remake
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
@@ -48,16 +49,35 @@ class PlannerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 상태바 숨기기
+        setContentView(R.layout.activity_planner) // XML 레이아웃 파일 설정
+
+
+        /* 상태바 숨기기
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         actionBar?.hide()
         // 전체 화면 모드 설정
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )*/
+
+        // 상태바와 내비게이션 바를 완전히 투명하게 설정
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // 상태바 아이콘 검정색 설정
                 )
+        window.statusBarColor = Color.TRANSPARENT // 상태바 투명
+        window.navigationBarColor = Color.TRANSPARENT // 내비게이션 바 투명
+
+
+
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        setContentView(R.layout.activity_planner) // XML 레이아웃 파일 설정
+
+
+
 
         // 레이아웃의 뷰 참조
         addTaskButton = findViewById(R.id.addText) // + 버튼 참조
