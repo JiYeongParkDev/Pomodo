@@ -8,7 +8,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 
 
@@ -39,7 +38,6 @@ class TimerForegroundService : Service(){
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("TimerForegroundService", "onStartCommand called")
 
         if (intent?.action == ACTION_UPDATE) {
             val isFocusTimer = intent.getBooleanExtra(EXTRA_IS_FOCUS_TIMER, true)
@@ -47,7 +45,6 @@ class TimerForegroundService : Service(){
             val breakRemaining = intent.getLongExtra(EXTRA_BREAK_REMAINING, 0L)
             val repeatCount = intent.getIntExtra(EXTRA_REPEAT_COUNT, 0)
 
-            Log.d("TimerForegroundService", "Data received: isFocusTimer=$isFocusTimer, focusRemaining=$focusRemaining, breakRemaining=$breakRemaining, repeatCount=$repeatCount")
 
             if (isFocusTimer) {
                 totalFocusTimeInSeconds++
@@ -106,7 +103,6 @@ class TimerForegroundService : Service(){
         }
 
 
-        Log.d("TimerForegroundService", "Creating notification with title: $title, content: $contentText")
 
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

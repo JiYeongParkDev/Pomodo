@@ -11,7 +11,7 @@ import java.time.YearMonth
 import java.util.Locale
 
 //타이머 뷰 모델
-//UI와 데이터베이스를 연결하는 중간다리 영ㄱ할
+//UI와 데이터베이스를 연결하는 중간다리 역할
 // LiveData를 사용해 데이터가 변경될 때 UI에 자동으로 반영되도록 설정한다.
 class TimerViewModel(application: Application) : AndroidViewModel(application) {
     private val timerRecordsDao = AppDatabase.getDatabase(application).timerRecordsDao()
@@ -68,7 +68,6 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
             // LiveData 업데이트
             _focusTimes.postValue(focusTimesMap)
-            Log.d("TimerViewModel", "FocusTimes Updated: $focusTimesMap")
         }
     }
 

@@ -6,7 +6,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
-//날짜가 바뀌면 알림이 간다.( 총집중시간이 초기화되어야 하니까)
+//날짜가 바뀌면 알림이 생성됨 총 집중시간이 초기화되어야 하니까
 class DateChangeReceiver : BroadcastReceiver(){
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent?.action == Intent.ACTION_DATE_CHANGED) {

@@ -84,9 +84,9 @@ class CalendarActivity : AppCompatActivity(){
             updateCalendar(-1)
         }
 
-        //다음 달로 이동
+        // 다음 달로 이동
         findViewById<Button>(R.id.nextMonthButton).setOnClickListener {
-            updateCalendar(1) //다음 달로 이동
+            updateCalendar(1)
         }
 
         // 플래너 부분으로 이동
@@ -198,14 +198,13 @@ class CalendarActivity : AppCompatActivity(){
     }
 
 
-    //UI에 현재 년도, 월을 뜨도록 함
+    // UI에 현재 년도, 월을 뜨도록 함
     private fun updateMonthYearText() {
         val monthYearText = getString(R.string.month_year_format, currentYear, currentMonth)
         findViewById<TextView>(R.id.monthYearTextView).text = monthYearText
     }
 
 
-    //색깔 한 번 바꿔볼까 해서 넣어본코드
     // 총 집중 시간에 따라 색상 계산
     private fun getColorBasedOnFocusTime(focusTime: Int): Int {
         return when (focusTime) {
@@ -229,7 +228,7 @@ class CalendarActivity : AppCompatActivity(){
     }
 
 
-    //새로 추가된 이모지 부분
+    // 새로 추가된 이모지 부분
     private fun generateSimpleCalendar() {
         emojiCalendarCardView.removeAllViews()
 
@@ -377,10 +376,5 @@ class CalendarActivity : AppCompatActivity(){
     private fun getDateKey(day: Int): String {
         return "$currentYear-${currentMonth.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}"
     }
-
-
-
-
-
 
 }

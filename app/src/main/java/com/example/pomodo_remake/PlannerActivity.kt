@@ -27,7 +27,7 @@ import com.example.pomodo_remake.AppDatabase
 import com.example.pomodo_remake.Task
 import kotlinx.coroutines.launch
 
-//정예원 메인액티비티
+
 class PlannerActivity : AppCompatActivity() {
 
     private lateinit var taskDao: TaskDao   // 데이터베이스 접근 객체
@@ -52,15 +52,6 @@ class PlannerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_planner) // XML 레이아웃 파일 설정
 
 
-        /* 상태바 숨기기
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        actionBar?.hide()
-        // 전체 화면 모드 설정
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                )*/
-
         // 상태바와 내비게이션 바를 완전히 투명하게 설정
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -68,22 +59,16 @@ class PlannerActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // 상태바 아이콘 검정색 설정
                 )
-        window.statusBarColor = Color.TRANSPARENT // 상태바 투명
-        window.navigationBarColor = Color.TRANSPARENT // 내비게이션 바 투명
-
-
-
+        window.statusBarColor = Color.TRANSPARENT       // 상태바 투명
+        window.navigationBarColor = Color.TRANSPARENT   // 내비게이션 바 투명
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-
-
-
         // 레이아웃의 뷰 참조
-        addTaskButton = findViewById(R.id.addText) // + 버튼 참조
-        taskContainer = findViewById(R.id.taskContainer) // 동적으로 할 일 추가할 LinearLayout 참조
-        editButton = findViewById(R.id.editButton) // 편집 버튼 참조
-        calendarIcon = findViewById(R.id.calendarIcon) // 캘린더 아이콘 참조
+        addTaskButton = findViewById(R.id.addText)           // + 버튼 참조
+        taskContainer = findViewById(R.id.taskContainer)     // 동적으로 할 일 추가할 LinearLayout 참조
+        editButton = findViewById(R.id.editButton)           // 편집 버튼 참조
+        calendarIcon = findViewById(R.id.calendarIcon)       // 캘린더 아이콘 참조
 
         timerIcon = findViewById(R.id.timerIcon)
         leaderBoardIcon = findViewById(R.id.calendarViewIcon)
@@ -92,19 +77,17 @@ class PlannerActivity : AppCompatActivity() {
 
         // 데이터베이스 및 DAO 초기화
         val database = MyApplication.getDatabase(this) // 안전하게 데이터베이스 가져오기
-        taskDao = database.taskDao() // DAO 초기화
+        taskDao = database.taskDao()                         // DAO 초기화
 
 
-        // leaderBoardIcon 클릭 시 기록 부분으로 이동 (추후 기능 추가 가능)
+        // leaderBoardIcon 클릭 시 기록 부분으로 이동
         leaderBoardIcon.setOnClickListener{
-            // CalendarActivity로 이동
             val intent = Intent(this, CalendarActivity::class.java)
             startActivity(intent)
         }
 
         //타이머 부분으로 이동
         timerIcon.setOnClickListener{
-            // CalendarActivity로 이동
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -122,7 +105,6 @@ class PlannerActivity : AppCompatActivity() {
         // 캘린더 아이콘 클릭 시 날짜 선택 다이얼로그 표시
         calendarIcon.setOnClickListener {
             showDatePickerDialog()
-            Log.d("DATE_SELECTION", "showDatePickerDialog 함수 호출됨")
         }
         // 새로운 Task 데이터를 데이터베이스에 삽입 (추가된 부분)
         insertTask()
@@ -132,10 +114,7 @@ class PlannerActivity : AppCompatActivity() {
         selectedDate = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
 
         loadPlannerData(selectedDate) // 현재 날짜에 맞는 할 일만 로드
-        Log.d("DATE_SELECTION", "앱 시작 시 기본 날짜 설정: $selectedDate")
 
-        // 데이터 로드 버튼을 클릭했을 때 할 일 목록 조회
-        //loadTasksFromDatabase()  // 앱 시작 시 데이터 조회를 위한 함수 호출
 
         // 또는, + 버튼 클릭 시 데이터 저장 후 loadTasksFromDatabase 호출
         addTaskButton.setOnClickListener {
@@ -148,7 +127,6 @@ class PlannerActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val tasks = taskDao.getAllTasks() // 데이터베이스에서 할 일 목록 가져오기
             tasks.forEach { task ->
-                Log.d("DB_TEST", "조회된 할 일: ${task.title}, 날짜: ${task.date}, 상태: ${task.status}")
                 addNewTask(task) // 각 할 일을 UI에 추가
             }
         }
@@ -157,7 +135,6 @@ class PlannerActivity : AppCompatActivity() {
     private fun insertTask() {
         // 새 할 일 데이터 생성
         val newTask = Task(date = "2024-11-10", title = "예시 할 일", status = 0)
-        Log.d("DB_TEST", "데이터베이스에 데이터가 저장되었습니다: 테스트 할 일")
         // Room DB에 데이터 삽입 (비동기)
         lifecycleScope.launch {
             // MyApplication.getDatabase(context)로 데이터베이스 접근
@@ -176,7 +153,6 @@ class PlannerActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
             loadPlannerData(selectedDate) // 선택된 날짜의 할 일 로드
-            Log.d("DATE_SELECTION", "사용자가 선택한 날짜: $selectedDate")
         }, year, month, day)
 
         datePickerDialog.show()
@@ -189,7 +165,6 @@ class PlannerActivity : AppCompatActivity() {
             val tasks = taskDao.getTasksByDate(selectedDate) // 선택된 날짜의 할 일 목록 가져오기
             tasks.forEach { task ->
                 addNewTask(task) // UI에 각 할 일을 추가
-                Log.d("DATE_SELECTION", "로딩된 할 일: ${task.title}, 날짜: ${task.date}")
             }
         }
     }
@@ -278,10 +253,8 @@ class PlannerActivity : AppCompatActivity() {
 
     // 데이터베이스에서 Task 삭제 함수
     private fun deleteTask(task: Task) {
-        Log.d("DB_TEST", "deleteTask 함수가 호출되었습니다.")
         lifecycleScope.launch {
             taskDao.deleteTask(task) // Room 데이터베이스에서 Task 삭제
-            Log.d("DB_TEST", "데이터베이스에서 삭제되었습니다: ${task.title}")
         }
     }
 
@@ -308,7 +281,6 @@ class PlannerActivity : AppCompatActivity() {
                         text = "삭제"
                         tag = "deleteButton"
                         setOnClickListener {
-                            Log.d("DB_TEST", "삭제 버튼이 클릭되었습니다.")
                             taskContainer.removeView(taskLayout) // 할 일 삭제
                             deleteTask(taskLayout.tag as Task) // 데이터베이스에서도 삭제
                         }
@@ -318,7 +290,6 @@ class PlannerActivity : AppCompatActivity() {
             } else {
                 // 편집 모드가 아닐 때는 삭제 버튼을 숨김
                 deleteButton?.let {
-                    Log.d("DB_TEST", "삭제 버튼이 제거되었습니다.")
                     taskLayout.removeView(it)
                 }
             }
@@ -347,7 +318,6 @@ class PlannerActivity : AppCompatActivity() {
 
                     lifecycleScope.launch {
                         taskDao.insertTask(newTask)
-                        Log.d("DB_TEST", "데이터베이스에 데이터가 저장되었습니다: ${newTask.title}, 날짜: ${newTask.date}")
                         loadPlannerData(selectedDate) // 저장 후 해당 날짜의 할 일을 로드
                     }
                 }
@@ -378,7 +348,6 @@ class PlannerActivity : AppCompatActivity() {
                     // (추가) DB에 업데이트된 내용을 반영
                     lifecycleScope.launch {
                         taskDao.updateTask(task) // Task 객체 업데이트
-                        Log.d("DB_TEST", "데이터베이스에서 제목이 업데이트되었습니다: ${task.title}")
                     }
                 }
                 dialog.dismiss()
@@ -396,17 +365,17 @@ class PlannerActivity : AppCompatActivity() {
             R.drawable.ic_cross // 엑스
         )
 
-        // 다이얼로그에 사용할 커스텀 레이아웃을 생성합니다.
+        // 다이얼로그에 사용할 커스텀 레이아웃 생성
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_symbol_selection, null)
         val symbolListView = dialogView.findViewById<LinearLayout>(R.id.symbol_list)
 
-        // AlertDialog를 미리 생성해 둡니다.
+        // AlertDialog를 미리 생성
         val dialog = AlertDialog.Builder(this)
             .setTitle("상태 선택")
             .setView(dialogView)
             .create()
 
-        // 각 이미지를 클릭할 수 있는 ImageView로 추가합니다.
+        // 각 이미지를 클릭할 수 있는 ImageView로 추가
         symbols.forEachIndexed {index, drawableId ->
             val imageView = ImageView(this).apply {
                 setImageResource(drawableId)
@@ -424,14 +393,13 @@ class PlannerActivity : AppCompatActivity() {
                     // 변경된 상태를 데이터베이스에 저장
                     lifecycleScope.launch {
                         taskDao.updateTask(task) // Task 업데이트
-                        Log.d("DB_TEST", "데이터베이스에 상태가 업데이트되었습니다: ${task.title}, 상태: ${task.status}")
                     }
                 }
             }
             symbolListView.addView(imageView)
         }
 
-        // 다이얼로그를 보여줍니다.
+        // 다이얼로그를 보여준다.
         dialog.show()
     }
 }
