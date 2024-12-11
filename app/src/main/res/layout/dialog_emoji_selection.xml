@@ -8,5 +8,5 @@
     android:gravity="center"
     android:id="@+id/emoji_container">
 
-    <!-- 이모지는 동적으로 추가됩니다 -->
+
 </LinearLayout>

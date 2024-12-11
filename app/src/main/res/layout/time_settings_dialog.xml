@@ -73,9 +73,5 @@
         android:layout_marginTop="8dp"
         android:textColor="@android:color/darker_gray"
         android:importantForAutofill="no"/>
-
-
-
-
-
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
