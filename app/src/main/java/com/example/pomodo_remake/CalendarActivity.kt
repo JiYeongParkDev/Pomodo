@@ -215,8 +215,8 @@ class CalendarActivity : AppCompatActivity(){
             in 7201..14400 -> Color.parseColor("#A2D6F8") // 2시간 1초 ~ 4시간
             in 14401..21600 -> Color.parseColor("#64B5F6") // 4시간 1초 ~ 6시간 (밝은 파란색)
             in 21601..28800 -> Color.parseColor("#549DE6") // 6시간 1초 ~ 8시간 (중간 파란색)
-            in 28801..72000 -> Color.parseColor("#3C77C4") // 8시간 1초 ~ 20시간 (짙은 파란색)
-            else -> Color.parseColor("#2F5EA3") // 20시간 초과 (어두운 파란색)
+            in 28801..86400 -> Color.parseColor("#3C77C4") // 8시간 1초 ~ 24시간 (짙은 파란색)
+            else -> Color.WHITE // 예외적으로 기본값
         }
     }
 
